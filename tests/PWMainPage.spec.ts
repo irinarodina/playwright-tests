@@ -98,7 +98,7 @@ test.describe('Playwright main page tests', () => {
     });
   });
 
-  test.only('Checking href attributes of header navigation elements', async ({ page }) => {
+  test('Checking href attributes of header navigation elements', async ({ page }) => {
     headerElements.forEach(({ locator, name, attribute }) => {
       if (attribute) {
         test.step(`Checking ${attribute.type} attribute of ${name} element`, async () => {
