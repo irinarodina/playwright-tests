@@ -90,6 +90,8 @@ const headerElements: Elements[] = [
   },
 ];
 
+const lightModes = ['light', 'dark'];
+
 test.describe('Playwright main page tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://playwright.dev/');
@@ -126,10 +128,19 @@ test.describe('Playwright main page tests', () => {
   test('Checking the switching of light-mode', async ({ page }) => {
     await expect.soft(page.getByLabel('Switch between dark and light')).toBeVisible();
     await expect.soft(page.getByLabel('Switch between dark and light')).toBeEnabled();
-    await expect.soft(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await expect.soft(page.locator('html')).toHaveAttribute('data-theme-choice', 'system');
     await page.getByLabel('Switch between dark and light').click();
-    await expect.soft(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await expect.soft(page.locator('html')).toHaveAttribute('data-theme-choice', 'light');
     await page.getByLabel('Switch between dark and light').click();
-    await expect.soft(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await expect.soft(page.locator('html')).toHaveAttribute('data-theme-choice', 'dark');
+  });
+
+  lightModes.forEach((mode) => {
+    test.only(`Checking active ${mode} mode styles`, async ({ page }) => {
+      await page.evaluate((mode) => {
+        document.querySelector('html')?.setAttribute('data-theme', mode);
+      }, mode);
+      await expect(page).toHaveScreenshot(`image-${mode}.png`);
+    });
   });
 });
