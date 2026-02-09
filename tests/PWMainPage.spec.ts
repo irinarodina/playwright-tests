@@ -136,7 +136,7 @@ test.describe('Playwright main page tests', () => {
   });
 
   lightModes.forEach((mode) => {
-    test.only(`Checking active ${mode} mode styles`, async ({ page }) => {
+    test(`Checking active ${mode} mode styles`, async ({ page }) => {
       await page.evaluate((mode) => {
         document.querySelector('html')?.setAttribute('data-theme', mode);
       }, mode);
