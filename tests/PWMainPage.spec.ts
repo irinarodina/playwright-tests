@@ -65,6 +65,21 @@ const headerElements: Elements[] = [
     name: 'Lightmode switch',
   },
   {
+    locator: (page: Page): Locator => page.getByRole('link', { name: 'Get started' }),
+    name: 'Get started button',
+    text: 'Get started',
+    attribute: {
+      type: 'href',
+      value: '/docs/intro',
+    },
+  },
+  {
+    locator: (page: Page): Locator =>
+      page.getByRole('heading', { name: 'Playwright enables reliable' }),
+    name: 'Main heading',
+    text: 'Playwright enables reliable end-to-end testing for modern web apps.',
+  },
+  {
     locator: (page: Page): Locator => page.getByRole('button', { name: 'Search (Ctrl+K)' }),
     name: 'Search field',
     text: 'Search',
@@ -98,7 +113,7 @@ test.describe('Playwright main page tests', () => {
     });
   });
 
-  test('Checking href attributes of header navigation elements', async ({ page }) => {
+  test('Checking attributes of header navigation elements', async ({ page }) => {
     headerElements.forEach(({ locator, name, attribute }) => {
       if (attribute) {
         test.step(`Checking ${attribute.type} attribute of ${name} element`, async () => {
@@ -116,23 +131,5 @@ test.describe('Playwright main page tests', () => {
     await expect.soft(page.locator('html')).toHaveAttribute('data-theme', 'light');
     await page.getByLabel('Switch between dark and light').click();
     await expect.soft(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  });
-
-  test('Checking the text of the header', async ({ page }) => {
-    await expect
-      .soft(page.getByRole('heading', { name: 'Playwright enables reliable' }))
-      .toBeVisible();
-    await expect
-      .soft(page.getByRole('heading', { name: 'Playwright enables reliable' }))
-      .toContainText('Playwright enables reliable end-to-end testing for modern web apps.');
-  });
-
-  test('Checking navigation element click', async ({ page }) => {
-    await page.goto('https://playwright.dev/');
-    await expect.soft(page.getByRole('link', { name: 'Get started' })).toBeVisible();
-    await expect.soft(page.getByRole('link', { name: 'Get started' })).toContainText('Get started');
-    await expect
-      .soft(page.getByRole('link', { name: 'Get started' }))
-      .toHaveAttribute('href', '/docs/intro');
   });
 });
